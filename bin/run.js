@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 const path = require('path');
-const gulpDir = path.join(__dirname, '../');
+const gulpDir = path.resolve(__dirname, '../');
 const nodeAndFileLocation = 2;
 const flags = process.argv.splice(nodeAndFileLocation, process.argv.length);
 const {executeParallelCommands, recolorAndPrint} = require('../lib/utils');
 
 const gulp = {
     command: 'gulp watch:tests --cwd ' + gulpDir,
-    flags: ['spec']
+    flags: ['spec']     
 };
 
 const tns = {
@@ -25,3 +25,4 @@ const tns = {
 
 const testProcess = executeParallelCommands([gulp, tns], flags);
 testProcess.stdout.on('data', recolorAndPrint);
+testProcess.stdout.on('exit', recolorAndPrint);

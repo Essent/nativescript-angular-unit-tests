@@ -1,6 +1,6 @@
 {
   "name": "rachnerd-test-plugin",
-  "version": "0.0.25",
+  "version": "0.0.31",
   "author": "Rachnerd <rachnerd@hotmail.com> (https://github.com/Rachnerd)",
   "description": "Workaround for NativeScript to run unit tests located in source code (Angular style guide)",
   "repository": {
@@ -13,7 +13,6 @@
   "bin": {
     "tns-test-angular": "./bin/run.js"
   },
-  "scripts": {},
   "keywords": [
     "Nativescript",
     "Angular",
