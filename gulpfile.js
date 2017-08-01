@@ -14,14 +14,14 @@ gulp.task('clean:tests', () => {
     return del(appDir + '/tests/.tmp', {force: true});
 });
 
-gulp.task('watch:tests', ['clean:tests'], () => {
+gulp.task('run:tests', ['clean:tests'], () => {
     const specFiles = parseFlag(argv.spec);
     let targetSrc = [SPEC_SRC];
     if (specFiles.length > 0 && specFiles[0] !== '') {
         targetSrc = specFiles.map(specFile => appDir + '/**/*' + specFile + '*.spec.js');
     }
     targetSrc.push('!' + appDir + '/tests/.tmp');
-    return watch(targetSrc, {ignoreInitial: false})
+    return (argv.justlaunch !== undefined ? gulp.src(targetSrc) : watch(targetSrc, {ignoreInitial: false}))
         .pipe(modifyFile(relativeRequireFileModifier(appDir)))
         .pipe(gulp.dest(SPEC_DIST));
 });
@@ -46,7 +46,6 @@ function getPathOfRequire(relativeRequire) {
  * Converts relative require paths to paths relative to /app prefixed with ~.
  */
 function relativeRequireFileModifier(appDir) {
-    console.log(path.sep);
     const relativeRequireRegex = /require\(["']{1}\.+\/[^)]+["']{1}\)/g;
     return (content, filePath) => {
         const relativeRequires = content.match(relativeRequireRegex) || [];

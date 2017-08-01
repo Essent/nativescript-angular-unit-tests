@@ -5,14 +5,16 @@ const nodeAndFileLocation = 2;
 const flags = process.argv.splice(nodeAndFileLocation, process.argv.length);
 const {executeParallelCommands, recolorAndPrint} = require('../lib/utils');
 
+const onlyCopy = flags.some(flag => flag === '--justcopy');
+
 const gulp = {
-    command: 'gulp watch:tests --cwd ' + gulpDir,
-    flags: ['spec']     
+    command: 'gulp run:tests --cwd ' + gulpDir,
+    flags: ['spec', 'justlaunch']
 };
 
 const tns = {
     command: 'tns test',
-    flags: ['*'],
+    flags: ['*', 'justlaunch'],
     ignore: gulp.flags,
     required: [
         {
@@ -22,7 +24,12 @@ const tns = {
         }
     ]
 };
+const processes = [gulp];
 
-const testProcess = executeParallelCommands([gulp, tns], flags);
+if(!onlyCopy) {
+    processes.push(tns);
+}
+
+const testProcess = executeParallelCommands(processes, flags);
 testProcess.stdout.on('data', recolorAndPrint);
 testProcess.stdout.on('exit', recolorAndPrint);
